@@ -8,16 +8,23 @@ BOT_TOKEN = "6570624343:AAEhriMK-kgVVVOx0DV4qoAD0xTS4JVTJ4Q"
 bot = telebot.TeleBot(BOT_TOKEN)
 
 questions = [
-    "What is your name?",
-    "Where are you from?",
-    "What is your favorite color?",
-    "What is your favorite food?"
+    "Please enter the Date?",
+    "Which Stock you Invested in?",
+    "What is the Quantity?",
+    "Was it Buy or Sale?",
+    "Give me the rate?"
 ]
 answers = {}
 
-
 @bot.message_handler(commands=['start'])
 def start(message):
+    user_id = message.chat.id
+    answers[user_id] = {}
+    bot.send_message(user_id, "Bot started. Type 'record' to begin recording.")
+
+
+@bot.message_handler(func=lambda message: message.text.lower() == 'record')
+def start_recording(message):
     user_id = message.chat.id
     answers[user_id] = {}
     bot.send_message(user_id, questions[0])
@@ -27,7 +34,7 @@ def start(message):
 def handle_message(message):
     user_id = message.chat.id
     if user_id not in answers:
-        bot.send_message(user_id, "Please start the bot by typing /start.")
+        bot.send_message(user_id, "Please start the bot by typing /start or 'record'.")
         return
 
     current_question_index = len(answers[user_id])
